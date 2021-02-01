@@ -1,4 +1,4 @@
-# flutter_contatos
+# Flutter Contact List
 
 This application (developed with Flutter and Dart) is a list of contacts where you can add, edit and delete each of your contacts. In this app, I try to implement a database system for increase my Flutter skills.
 
