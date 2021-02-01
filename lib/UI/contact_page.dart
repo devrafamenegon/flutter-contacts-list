@@ -6,7 +6,6 @@ import 'package:flutter_contatos/helpers/contact_helper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ContactPage extends StatefulWidget {
-
   final Contact contact;
 
   ContactPage({this.contact});
@@ -16,7 +15,6 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -31,7 +29,7 @@ class _ContactPageState extends State<ContactPage> {
   void initState() {
     super.initState();
 
-    if(widget.contact == null){
+    if (widget.contact == null) {
       _editedContact = Contact();
     } else {
       _editedContact = Contact.fromMap(widget.contact.toMap());
@@ -39,7 +37,6 @@ class _ContactPageState extends State<ContactPage> {
       _nameController.text = _editedContact.name;
       _emailController.text = _editedContact.email;
       _phoneController.text = _editedContact.phone;
-
     }
   }
 
@@ -54,8 +51,8 @@ class _ContactPageState extends State<ContactPage> {
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            if(_editedContact.name.isNotEmpty && _editedContact.name != null){
+          onPressed: () {
+            if (_editedContact.name.isNotEmpty && _editedContact.name != null) {
               Navigator.pop(context, _editedContact);
             } else {
               FocusScope.of(context).requestFocus(_nameFocus);
@@ -77,11 +74,13 @@ class _ContactPageState extends State<ContactPage> {
                     //caso tenha uma imagem enviada pelo usuário, o app irá buscar e aplicar tal, caso não tenha, uma imagem padrão será aplicada
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: _editedContact.img != null ? FileImage(File(_editedContact.img)) : AssetImage("images/user.png"),
+                      image: _editedContact.img != null
+                          ? FileImage(File(_editedContact.img))
+                          : AssetImage("images/user.png"),
                     ),
                   ),
                 ),
-                onTap: (){
+                onTap: () {
                   _showModalCameraGallery(context);
                 },
               ),
@@ -89,7 +88,7 @@ class _ContactPageState extends State<ContactPage> {
                 controller: _nameController,
                 focusNode: _nameFocus,
                 decoration: InputDecoration(labelText: "Nome"),
-                onChanged: (text){
+                onChanged: (text) {
                   _userEdited = true;
                   setState(() {
                     _editedContact.name = text;
@@ -99,7 +98,7 @@ class _ContactPageState extends State<ContactPage> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(labelText: "Email"),
-                onChanged: (text){
+                onChanged: (text) {
                   _userEdited = true;
                   _editedContact.email = text;
                 },
@@ -108,7 +107,7 @@ class _ContactPageState extends State<ContactPage> {
               TextField(
                 controller: _phoneController,
                 decoration: InputDecoration(labelText: "Phone"),
-                onChanged: (text){
+                onChanged: (text) {
                   _userEdited = true;
                   _editedContact.phone = text;
                 },
@@ -121,44 +120,44 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  Future<bool> _requestPop(){
-    if(_userEdited){
-      showDialog(context: context,
-        builder: (context){
-          return AlertDialog(
-            title: Text("Descartar Aterações?"),
-            content: Text("Se sair as alterações serão perdidas!"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Cancelar"),
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text("Sim"),
-                onPressed: (){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        }
-      );
+  Future<bool> _requestPop() {
+    if (_userEdited) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Descartar Alterações?"),
+              content: Text("Se sair as alterações serão perdidas!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Cancelar"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text("Sim"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          });
       return Future.value(false);
     } else {
       return Future.value(true);
     }
   }
 
-  void _showModalCameraGallery(BuildContext context){
+  void _showModalCameraGallery(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context){
+      builder: (context) {
         return BottomSheet(
-            onClosing: (){},
-            builder: (context){
+            onClosing: () {},
+            builder: (context) {
               return Container(
                 padding: EdgeInsets.all(10.0),
                 child: Column(
@@ -167,13 +166,15 @@ class _ContactPageState extends State<ContactPage> {
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: FlatButton(
-                        child: Text("Tirar Foto",
+                        child: Text(
+                          "Tirar Foto",
                           style: TextStyle(color: Colors.red, fontSize: 20.0),
                         ),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pop(context);
-                          ImagePicker.pickImage(source: ImageSource.camera).then((file){
-                            if(file == null) return;
+                          ImagePicker.pickImage(source: ImageSource.camera)
+                              .then((file) {
+                            if (file == null) return;
                             setState(() {
                               _editedContact.img = file.path;
                             });
@@ -184,13 +185,15 @@ class _ContactPageState extends State<ContactPage> {
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: FlatButton(
-                        child: Text("Selecionar na Galeria",
+                        child: Text(
+                          "Selecionar na Galeria",
                           style: TextStyle(color: Colors.red, fontSize: 20.0),
                         ),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.pop(context);
-                          ImagePicker.pickImage(source: ImageSource.gallery).then((file){
-                            if(file == null) return;
+                          ImagePicker.pickImage(source: ImageSource.gallery)
+                              .then((file) {
+                            if (file == null) return;
                             setState(() {
                               _editedContact.img = file.path;
                             });
@@ -201,10 +204,8 @@ class _ContactPageState extends State<ContactPage> {
                   ],
                 ),
               );
-            }
-        );
+            });
       },
     );
   }
-
 }
